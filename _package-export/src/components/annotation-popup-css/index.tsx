@@ -176,7 +176,7 @@ export const AnnotationPopupCSS = forwardRef<AnnotationPopupCSSHandle, Annotatio
           {computedStyles && Object.keys(computedStyles).length > 0 ? (
             <button
               className={styles.headerToggle}
-              onClick={() => {
+onClick={() => {
                 const wasExpanded = isStylesExpanded;
                 setIsStylesExpanded(!isStylesExpanded);
                 if (wasExpanded) {
