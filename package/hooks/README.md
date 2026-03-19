@@ -74,15 +74,14 @@ Add to `~/.claude/settings.json` to enable for all projects:
 When there are pending annotations, Claude sees:
 
 ```
-=== AGENTATION FEEDBACK (2 pending) ===
+=== AGENTATION: 2 UI annotations ===
 
 [1] button.submit-btn
-    Comment: This button should be disabled during loading
+    This button should be disabled during loading
 
 [2] div.error-message
-    Comment: Error text is hard to read, needs more contrast
+    Error text is hard to read, needs more contrast
 
-Address these UI issues.
 === END ===
 ```
 

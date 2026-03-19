@@ -94,7 +94,7 @@ export const useActiveScrollElement = (
 
         // This item just entered the viewport from the top, don't make it active until it reaches the middle of the screen
         if (didIntersectAtTop) {
-          return;
+          continue;
         }
 
         // This item just passed the middle of the screen, make it active

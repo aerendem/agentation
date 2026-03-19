@@ -48,6 +48,69 @@ const IconCopyAnimated = ({ size = 24, copied = false }: { size?: number; copied
   </svg>
 );
 
+const MODAL_STYLES = `
+  @keyframes modalOverlayEnter {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes modalOverlayExit {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+  @keyframes modalEnter {
+    from { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
+    to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  }
+  @keyframes modalExit {
+    from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    to { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
+  }
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    animation: modalOverlayEnter 0.2s ease forwards;
+  }
+  .modal-overlay.exiting { animation: modalOverlayExit 0.15s ease forwards; }
+  .modal-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 400px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.06);
+    z-index: 10000;
+    padding: 1.5rem;
+    animation: modalEnter 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  .modal-content.exiting { animation: modalExit 0.15s ease forwards; }
+  .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+  .modal-title { font-size: 1rem; font-weight: 600; color: #111; margin: 0; }
+  .modal-close {
+    width: 28px; height: 28px; border-radius: 50%; background: transparent; border: none;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    color: rgba(0, 0, 0, 0.4); transition: background 0.15s ease, color 0.15s ease;
+  }
+  .modal-close:hover { background: rgba(0, 0, 0, 0.05); color: rgba(0, 0, 0, 0.7); }
+  .modal-body { color: rgba(0, 0, 0, 0.65); font-size: 0.875rem; line-height: 1.5; margin-bottom: 1.25rem; }
+  .modal-body p + p { margin-top: 0.75rem; }
+  .modal-footer { display: flex; justify-content: flex-end; gap: 0.5rem; }
+  .modal-btn {
+    padding: 0.5rem 1rem; font-size: 0.8125rem; font-weight: 600; border-radius: 8px;
+    border: none; cursor: pointer; transition: background 0.15s ease, color 0.15s ease;
+  }
+  .modal-btn-secondary { background: transparent; color: rgba(0, 0, 0, 0.5); }
+  .modal-btn-secondary:hover { background: rgba(0, 0, 0, 0.05); color: rgba(0, 0, 0, 0.8); }
+  .modal-btn-primary { background: #3c82f7; color: white; }
+  .modal-btn-primary:hover { background: #2d6fe0; }
+`;
+
 // Shadow DOM Modal Component
 function ShadowModal({ isOpen, isExiting, onClose }: { isOpen: boolean; isExiting: boolean; onClose: () => void }) {
   const hostRef = useRef<HTMLDivElement>(null);
@@ -62,68 +125,7 @@ function ShadowModal({ isOpen, isExiting, onClose }: { isOpen: boolean; isExitin
 
   if (!isOpen) return <div ref={hostRef} style={{ display: 'none' }} />;
 
-  const modalStyles = `
-    @keyframes modalOverlayEnter {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    @keyframes modalOverlayExit {
-      from { opacity: 1; }
-      to { opacity: 0; }
-    }
-    @keyframes modalEnter {
-      from { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
-      to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-    }
-    @keyframes modalExit {
-      from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-      to { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
-    }
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(4px);
-      z-index: 9999;
-      animation: modalOverlayEnter 0.2s ease forwards;
-    }
-    .modal-overlay.exiting { animation: modalOverlayExit 0.15s ease forwards; }
-    .modal-content {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 90%;
-      max-width: 400px;
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.06);
-      z-index: 10000;
-      padding: 1.5rem;
-      animation: modalEnter 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
-    .modal-content.exiting { animation: modalExit 0.15s ease forwards; }
-    .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
-    .modal-title { font-size: 1rem; font-weight: 600; color: #111; margin: 0; }
-    .modal-close {
-      width: 28px; height: 28px; border-radius: 50%; background: transparent; border: none;
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      color: rgba(0, 0, 0, 0.4); transition: background 0.15s ease, color 0.15s ease;
-    }
-    .modal-close:hover { background: rgba(0, 0, 0, 0.05); color: rgba(0, 0, 0, 0.7); }
-    .modal-body { color: rgba(0, 0, 0, 0.65); font-size: 0.875rem; line-height: 1.5; margin-bottom: 1.25rem; }
-    .modal-body p + p { margin-top: 0.75rem; }
-    .modal-footer { display: flex; justify-content: flex-end; gap: 0.5rem; }
-    .modal-btn {
-      padding: 0.5rem 1rem; font-size: 0.8125rem; font-weight: 600; border-radius: 8px;
-      border: none; cursor: pointer; transition: background 0.15s ease, color 0.15s ease;
-    }
-    .modal-btn-secondary { background: transparent; color: rgba(0, 0, 0, 0.5); }
-    .modal-btn-secondary:hover { background: rgba(0, 0, 0, 0.05); color: rgba(0, 0, 0, 0.8); }
-    .modal-btn-primary { background: #3c82f7; color: white; }
-    .modal-btn-primary:hover { background: #2d6fe0; }
-  `;
+  const modalStyles = MODAL_STYLES;
 
   const modalContent = (
     <>
@@ -366,129 +368,7 @@ export default function AgentationDocs() {
       {/* Test Modal */}
       {modalOpen && (
         <>
-          <style>{`
-            @keyframes modalOverlayEnter {
-              from { opacity: 0; }
-              to { opacity: 1; }
-            }
-            @keyframes modalOverlayExit {
-              from { opacity: 1; }
-              to { opacity: 0; }
-            }
-            @keyframes modalEnter {
-              from {
-                opacity: 0;
-                transform: translate(-50%, -50%) scale(0.95);
-              }
-              to {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1);
-              }
-            }
-            @keyframes modalExit {
-              from {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1);
-              }
-              to {
-                opacity: 0;
-                transform: translate(-50%, -50%) scale(0.95);
-              }
-            }
-            .modal-overlay {
-              position: fixed;
-              inset: 0;
-              background: rgba(255, 255, 255, 0.7);
-              backdrop-filter: blur(4px);
-              z-index: 9999;
-              animation: modalOverlayEnter 0.2s ease forwards;
-            }
-            .modal-overlay.exiting {
-              animation: modalOverlayExit 0.15s ease forwards;
-            }
-            .modal-content {
-              position: fixed;
-              top: 50%;
-              left: 50%;
-              transform: translate(-50%, -50%);
-              width: 90%;
-              max-width: 400px;
-              background: #fff;
-              border-radius: 16px;
-              box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.06);
-              z-index: 10000;
-              padding: 1.5rem;
-              animation: modalEnter 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-              font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            }
-            .modal-content.exiting {
-              animation: modalExit 0.15s ease forwards;
-            }
-            .modal-header {
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-              margin-bottom: 1rem;
-            }
-            .modal-title {
-              font-size: 1rem;
-              font-weight: 600;
-              color: #111;
-              margin: 0;
-            }
-            .modal-close {
-              width: 28px;
-              height: 28px;
-              border-radius: 50%;
-              background: transparent;
-              border: none;
-              cursor: pointer;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              color: rgba(0, 0, 0, 0.4);
-              transition: background 0.15s ease, color 0.15s ease;
-            }
-            .modal-close:hover {
-              background: rgba(0, 0, 0, 0.05);
-              color: rgba(0, 0, 0, 0.7);
-            }
-            .modal-body {
-              color: rgba(0, 0, 0, 0.65);
-              font-size: 0.875rem;
-              line-height: 1.5;
-              margin-bottom: 1.25rem;
-            }
-            .modal-footer {
-              display: flex;
-              justify-content: flex-end;
-              gap: 0.5rem;
-            }
-            .modal-btn {
-              padding: 0.5rem 1rem;
-              font-size: 0.8125rem;
-              font-weight: 600;
-              border-radius: 8px;
-              border: none;
-              cursor: pointer;
-              transition: background 0.15s ease, color 0.15s ease;
-            }
-            .modal-btn-secondary {
-              background: transparent;
-              color: rgba(0, 0, 0, 0.5);
-            }
-            .modal-btn-secondary:hover {
-              background: rgba(0, 0, 0, 0.05);
-              color: rgba(0, 0, 0, 0.8);
-            }
-            .modal-btn-primary {
-              background: #3c82f7;
-              color: white;
-            }
-            .modal-btn-primary:hover {
-              background: #2d6fe0;
-            }
-          `}</style>
+          <style>{MODAL_STYLES}</style>
           <div
             className={`modal-overlay${modalExiting ? ' exiting' : ''}`}
             onClick={closeModal}

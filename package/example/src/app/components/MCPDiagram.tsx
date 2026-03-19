@@ -24,6 +24,8 @@ const PULSE_COLOR = "#60a5fa";
 const LOOP_INTERVAL = 1200;
 const INITIAL_DELAY = 2500;
 
+let mcpDiagramStyleRefCount = 0;
+
 // Pure CSS keyframes - this WILL work, browser-native animation
 const PULSE_CSS = `
 @keyframes mcpPulseFade {
@@ -305,6 +307,7 @@ export function MCPDiagram() {
   // Inject CSS keyframes into document head
   useEffect(() => {
     const styleId = "mcp-diagram-pulse-css";
+    mcpDiagramStyleRefCount++;
     if (!document.getElementById(styleId)) {
       const style = document.createElement("style");
       style.id = styleId;
@@ -312,8 +315,11 @@ export function MCPDiagram() {
       document.head.appendChild(style);
     }
     return () => {
-      const existing = document.getElementById(styleId);
-      if (existing) existing.remove();
+      mcpDiagramStyleRefCount--;
+      if (mcpDiagramStyleRefCount === 0) {
+        const existing = document.getElementById(styleId);
+        if (existing) existing.remove();
+      }
     };
   }, []);
 

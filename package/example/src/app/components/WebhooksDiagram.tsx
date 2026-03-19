@@ -22,6 +22,8 @@ const PULSE_COLOR = "#60a5fa";
 const LOOP_INTERVAL = 1400;
 const INITIAL_DELAY = 2000;
 
+let webhooksDiagramStyleRefCount = 0;
+
 const PULSE_CSS = `
 @keyframes webhookPulseLabel {
   0% { fill: rgba(0,0,0,0.45); }
@@ -295,6 +297,7 @@ export function WebhooksDiagram() {
   // Inject CSS
   useEffect(() => {
     const styleId = "webhooks-diagram-pulse-css";
+    webhooksDiagramStyleRefCount++;
     if (!document.getElementById(styleId)) {
       const style = document.createElement("style");
       style.id = styleId;
@@ -302,8 +305,11 @@ export function WebhooksDiagram() {
       document.head.appendChild(style);
     }
     return () => {
-      const existing = document.getElementById(styleId);
-      if (existing) existing.remove();
+      webhooksDiagramStyleRefCount--;
+      if (webhooksDiagramStyleRefCount === 0) {
+        const existing = document.getElementById(styleId);
+        if (existing) existing.remove();
+      }
     };
   }, []);
 

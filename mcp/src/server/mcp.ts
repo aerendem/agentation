@@ -540,6 +540,7 @@ export async function handleTool(name: string, args: unknown): Promise<ToolResul
         count: response.count,
         annotations: response.annotations.map((a) => ({
           id: a.id,
+          sessionId: a.sessionId,
           comment: a.comment,
           element: a.element,
           elementPath: a.elementPath,
@@ -644,6 +645,7 @@ export async function handleTool(name: string, args: unknown): Promise<ToolResul
             sessions,
             annotations: pending.annotations.map((a) => ({
               id: a.id,
+              sessionId: a.sessionId,
               comment: a.comment,
               element: a.element,
               elementPath: a.elementPath,
@@ -674,6 +676,7 @@ export async function handleTool(name: string, args: unknown): Promise<ToolResul
             sessions: result.sessions,
             annotations: result.annotations.map((a) => ({
               id: a.id,
+              sessionId: a.sessionId,
               comment: a.comment,
               element: a.element,
               elementPath: a.elementPath,

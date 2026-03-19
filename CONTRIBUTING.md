@@ -16,7 +16,7 @@ We generally recommend opening an issue or discussion first, especially for larg
 
 - **Large UI changes** - The toolbar UI is intentionally minimal. Changes that affect everyone's experience need to benefit everyone.
 - **More options and settings** - We prefer opinionated defaults over flexibility.
-- **Framework wrappers** - Agentation is React-only by design. If you're interested in Vue/Svelte/Angular support, open a discussion first.
+- **Framework wrappers** - Agentation currently supports React and SolidJS. If you're interested in Vue/Svelte/Angular support, open a discussion first.
 
 ## UI Changes
 

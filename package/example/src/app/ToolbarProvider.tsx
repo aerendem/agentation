@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Agentation } from "agentation";
 
 export function ToolbarProvider() {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -13,7 +13,7 @@ export function ToolbarProvider() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  if (isMobile) return null;
+  if (isMobile === null || isMobile) return null;
 
   const endpoint = process.env.NODE_ENV === "development"
     ? "http://localhost:4747"

@@ -279,8 +279,8 @@ export function createSQLiteStore(dbPath?: string): AFSStore {
         comment = COALESCE(@comment, comment),
         status = COALESCE(@status, status),
         updated_at = @updatedAt,
-        resolved_at = COALESCE(@resolvedAt, resolved_at),
-        resolved_by = COALESCE(@resolvedBy, resolved_by),
+        resolved_at = IIF(@status IN ('pending', 'acknowledged'), NULL, COALESCE(@resolvedAt, resolved_at)),
+        resolved_by = IIF(@status IN ('pending', 'acknowledged'), NULL, COALESCE(@resolvedBy, resolved_by)),
         thread = COALESCE(@thread, thread),
         intent = COALESCE(@intent, intent),
         severity = COALESCE(@severity, severity)

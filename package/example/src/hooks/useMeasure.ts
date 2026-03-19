@@ -7,17 +7,22 @@ type Bounds = {
 
 /** Measures the width/height of an element using ResizeObserver. */
 export const useMeasure = <T extends HTMLElement>(): [
-  React.RefObject<T>,
+  React.RefCallback<T>,
   Bounds,
 ] => {
-  const ref = React.useRef<T>(null);
   const [bounds, setBounds] = React.useState<Bounds>({
     width: undefined,
     height: undefined,
   });
 
+  const [target, setTarget] = React.useState<T | null>(null);
+
+  const callbackRef = React.useCallback((node: T | null) => {
+    setTarget(node);
+  }, []);
+
   React.useLayoutEffect(() => {
-    if (!ref.current) return;
+    if (!target) return;
 
     const observer = new ResizeObserver((entries) => {
       const entry = entries[0];
@@ -26,10 +31,10 @@ export const useMeasure = <T extends HTMLElement>(): [
         height: entry.contentRect.height,
       });
     });
-    observer.observe(ref.current);
+    observer.observe(target);
 
     return () => observer.disconnect();
-  }, []);
+  }, [target]);
 
-  return [ref, bounds];
+  return [callbackRef, bounds];
 };

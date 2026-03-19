@@ -62,7 +62,7 @@ class EventBus {
     };
 
     // Notify global subscribers
-    for (const handler of this.handlers) {
+    for (const handler of [...this.handlers]) {
       try {
         handler(event);
       } catch (err) {
@@ -73,7 +73,7 @@ class EventBus {
     // Notify session-specific subscribers
     const sessionHandlers = this.sessionHandlers.get(sessionId);
     if (sessionHandlers) {
-      for (const handler of sessionHandlers) {
+      for (const handler of [...sessionHandlers]) {
         try {
           handler(event);
         } catch (err) {
@@ -191,7 +191,7 @@ class UserEventBus {
     // Notify user-specific global subscribers
     const userHandlers = this.userHandlers.get(userId);
     if (userHandlers) {
-      for (const handler of userHandlers) {
+      for (const handler of [...userHandlers]) {
         try {
           handler(event);
         } catch (err) {
@@ -205,7 +205,7 @@ class UserEventBus {
     if (userSessions) {
       const sessionHandlers = userSessions.get(sessionId);
       if (sessionHandlers) {
-        for (const handler of sessionHandlers) {
+        for (const handler of [...sessionHandlers]) {
           try {
             handler(event);
           } catch (err) {

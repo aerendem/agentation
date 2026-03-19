@@ -23,6 +23,8 @@ const PULSE_COLOR = "#60a5fa";
 const LOOP_INTERVAL = 1400;
 const INITIAL_DELAY = 2000;
 
+let schemaDiagramStyleRefCount = 0;
+
 const PULSE_CSS = `
 @keyframes schemaPulseFade {
   0% { opacity: 0; }
@@ -330,6 +332,7 @@ export function SchemaDiagram() {
   // Inject CSS
   useEffect(() => {
     const styleId = "schema-diagram-pulse-css";
+    schemaDiagramStyleRefCount++;
     if (!document.getElementById(styleId)) {
       const style = document.createElement("style");
       style.id = styleId;
@@ -337,8 +340,11 @@ export function SchemaDiagram() {
       document.head.appendChild(style);
     }
     return () => {
-      const existing = document.getElementById(styleId);
-      if (existing) existing.remove();
+      schemaDiagramStyleRefCount--;
+      if (schemaDiagramStyleRefCount === 0) {
+        const existing = document.getElementById(styleId);
+        if (existing) existing.remove();
+      }
     };
   }, []);
 

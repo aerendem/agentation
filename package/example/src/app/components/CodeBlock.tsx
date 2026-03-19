@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useId, useRef, useEffect } from "react";
+import { useState, useId, useRef, useEffect, type CSSProperties } from "react";
 import { Highlight, themes } from "prism-react-renderer";
 import { motion, useAnimate, type AnimationSequence } from "framer-motion";
 
-function CopyButton({ text }: { text: string }) {
+export function CopyButton({ text, style: styleProp }: { text: string; style?: CSSProperties }) {
   const [copied, setCopied] = useState(false);
   const [scope, animate] = useAnimate();
   const maskId = useId();
@@ -141,6 +141,7 @@ function CopyButton({ text }: { text: string }) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        ...styleProp,
       }}
     >
       <svg

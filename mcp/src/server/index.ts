@@ -75,3 +75,4 @@ async function main(): Promise<void> {
   await startMcpServer(httpUrl);
 }
 
+main();

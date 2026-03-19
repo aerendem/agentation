@@ -62,9 +62,9 @@ export const Tooltip = ({
     <>
       <span
         ref={triggerRef}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
         {...props}
+        onMouseEnter={(e) => { handleMouseEnter(); props.onMouseEnter?.(e); }}
+        onMouseLeave={(e) => { handleMouseLeave(); props.onMouseLeave?.(e); }}
       >
         {children}
       </span>

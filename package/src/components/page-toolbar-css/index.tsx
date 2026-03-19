@@ -3538,12 +3538,12 @@ const [settings, setSettings] = useState<ToolbarSettings>(() => {
                         Auto-Send
                       </span>
                       <label
-                        className={`${styles.toggleSwitch} ${!settings.webhookUrl ? styles.disabled : ""}`}
+                        className={`${styles.toggleSwitch} ${!settings.webhookUrl && !webhookUrl ? styles.disabled : ""}`}
                       >
                         <input
                           type="checkbox"
                           checked={settings.webhooksEnabled}
-                          disabled={!settings.webhookUrl}
+                          disabled={!settings.webhookUrl && !webhookUrl}
                           onChange={() =>
                             setSettings((s) => ({
                               ...s,

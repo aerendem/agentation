@@ -312,9 +312,12 @@ export function getNearbyElements(element: HTMLElement): string {
   if (!parent) return "";
 
   // Get siblings from the correct source
+  // Use parentNode (not parentElement) so elements that are direct children of a
+  // shadow root are handled correctly — their parentNode is the ShadowRoot itself,
+  // while parentElement would be null in that case.
   const elementRoot = element.getRootNode();
-  const children = (elementRoot instanceof ShadowRoot && element.parentElement)
-    ? Array.from(element.parentElement.children)
+  const children = (elementRoot instanceof ShadowRoot && element.parentNode)
+    ? Array.from((element.parentNode as Element | ShadowRoot).children)
     : Array.from(parent.children);
 
   const siblings = children.filter(
