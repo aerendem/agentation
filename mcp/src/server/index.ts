@@ -75,4 +75,10 @@ async function main(): Promise<void> {
   await startMcpServer(httpUrl);
 }
 
-main();
+// Only run when executed directly (not when imported by cli.ts or programmatic consumers)
+const isDirectRun =
+  process.argv[1]?.endsWith("/server/index.js") ||
+  process.argv[1]?.endsWith("/server/index.mjs");
+if (isDirectRun) {
+  main();
+}
